@@ -27,8 +27,10 @@ async def post_user(user:User):
          
 
 @router.get("/authenticate")
-def auth_user(username:str, password:str):
-    return authenticate_user(username, password)
+def auth_user(email:str, password:str):
+    if(authenticate_user(email, password)):
+        return {"SUCCESS":"TRUE"}
+    return {"SUCCESS":"TRUE"}
 
 @router.post("/login")
 async def generate_token(form_data: _security.OAuth2PasswordRequestForm = fastapi.Depends()):

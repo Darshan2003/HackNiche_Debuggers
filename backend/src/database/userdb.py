@@ -26,7 +26,7 @@ def create_user(user):
 
 
 def authenticate_user(username: str, password: str):
-    document = collection.find_one({"username":username},{"_id":0})
+    document = collection.find_one({"email":username},{"_id":0})
     if document == None:
         return "invalid credentials"
 

@@ -1,63 +1,109 @@
-import React, { useRef } from 'react'
-import logo from "../assets/logo.jpeg"
-import { ToastContainer, toast } from 'react-toastify';
-import { Link } from "react-router-dom"
+import React, { useRef, useState } from 'react'
+import { NavLink,useNavigate } from "react-router-dom"
 import sideimage from "../assets/sideimage.jpg"
+import { backendUrl } from '../definition';
+import axios from "axios";
 
 
 function Signup() {
+    
+  const navigate = useNavigate();
 
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
-    const confirmPasswordRef = useRef(null);
+    const [firstNameRef, setFirstNameRef] = useState('');
+    const [lastNameRef, setLastNameRef] = useState('');
+    const [emailRef, setEmailRef] = useState('');
+    const [passwordRef, setPasswordRef] = useState('');
+    const [confirmPasswordRef, setConfirmPasswordRef] = useState('');
+
+    
+    // const uploadData = async () => {
+
+    //         const formData = {
+    //             username: firstNameRef,
+    //             lastname: lastNameRef,
+    //             password: passwordRef,
+    //             email: emailRef
+    //         }
+            
+    //         try {
+    //             let res;
+                
+    //             navigate("/genre")                
+    //             res = await axios.post(
+    //                 `${backendUrl}/api/authentication/register`,
+    //                 formData
+                    
+    //                 );
+    //                 console.log(res);
+                    
+    //                 // if (res.data.SUCCESS == "TRUE") {
+    //                 //     setTimeout( () => {
+    //                 //     // cancelBtn();
+    //                 // }, 1000 );
+                    
+            
+                
+    //         } 
+    //         catch (ex) {
+    //             console.log(ex);
+    //         }
+
+    //     }
 
 
-    const firstNameRef = useRef(null);
-    const lastNameRef = useRef(null);
+
+    const uploadData = async () => {
 
 
+        if (!firstNameRef) {
+            console.log("Please Enter Complete data");
+        }
+        else if(!lastNameRef)
+        {
+            console.log("Please Enter Complete data");
+        }
+        else if(!emailRef)
+        {
+            console.log("Please Enter Complete data");
+        }
+        else if(!passwordRef)
+        {
+            console.log("Please Enter Complete data");
+        }
+        else if(!confirmPasswordRef)
+        {
+            console.log("Please Enter Complete data");
+        }
+        else
+        {
+            const formData = {
+                username: firstNameRef,
+                lastname: lastNameRef,
+                password: passwordRef,
+                email: emailRef
+            }
+            
+            try {
+              let res = await axios.post(
+                `${backendUrl}/api/authentication/register`,
+                formData
+              );
 
-    const notifySuccess = () => toast.success('Logged in successfully', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-    });
-    const notifyError = () => toast.error('Invalid email or password', {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-    });
+              console.log(res);
+             if (res.data.SUCCESS == "TRUE") {
+                        setTimeout( () => {
+                        navigate('/genre',{state:{email:emailRef}})
+                    }, 1000 );
+                }
+              
+            } catch (ex) {
+                console.log(ex);
+            }
 
-    const signUp = (e) => {
-        e.preventDefault();
-
+        }
     }
-
     return (
         <>
-
-            <ToastContainer
-                position="top-right"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
             <div
 
                 style={{
@@ -76,7 +122,7 @@ function Signup() {
                         className='object-contain w-28 h-28 cursor-pointer rounded-full border border-black '
                         src={logo} alt="logo" /> */}
                     <h1 className='text-center text-4xl mb-10'>Welcome to the world of information!</h1>
-                    <form
+                    <div
                 
                         className='flex flex-col justify-center items-center space-y-8'>
                         <div className='flex justify-between items-center w-full space-x-12'>
@@ -84,27 +130,33 @@ function Signup() {
                                 style={{
                                     fontFamily: 'Medium'
                                 }}
-                                ref={firstNameRef} type="text" placeholder="First Name" className='placeholder:text-gray-600 px-4 py-2 outline-none border border-gray-800 w-64'
+                                type="text" placeholder="First Name" className='placeholder:text-gray-600 px-4 py-2 outline-none border border-gray-800 w-64'
+                                onChange={(event) => {setFirstNameRef(event.target.value)}}
                             />
                             <input
                                 style={{
                                     fontFamily: 'Medium'
                                 }}
-                                ref={lastNameRef} type="text" placeholder="Last Name" className='placeholder:text-gray-600 px-4 py-2  outline-none border border-gray-800 w-64'
+                                type="text" placeholder="Last Name" className='placeholder:text-gray-600 px-4 py-2  outline-none border border-gray-800 w-64'
+                                onChange={(event) => {setLastNameRef(event.target.value)}}
+                            
                             />
                         </div>
                         <div className='flex justify-between items-center w-full '>
                             <input
                                 style={{
                                     fontFamily: 'Medium'
-                                }}
-                                ref={emailRef} type="email" placeholder="Email address" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-64 '
+                                }}  
+                                type="email" placeholder="Email address" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-64 '
+                                onChange={(event) => {setEmailRef(event.target.value)}}
                             />
                             <input
                                 style={{
                                     fontFamily: 'Medium'
                                 }}
-                                ref={passwordRef} type="password" placeholder="Password" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-64'
+                                type="password" placeholder="Password" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-64'
+                                onChange={(event) => {setPasswordRef(event.target.value)}}
+                            
                             />
                         </div>
 
@@ -112,15 +164,17 @@ function Signup() {
                             style={{
                                 fontFamily: 'Medium'
                             }}
-                            ref={confirmPasswordRef} type="password" placeholder="Confirm Password" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-72'
+                           type="password" placeholder="Confirm Password" className='placeholder:text-gray-600 px-5 py-2  outline-none border border-gray-800 w-72'
+                           onChange={(event) => {setConfirmPasswordRef(event.target.value)}}
                         />
 
                         <div className='flex justify-center items-center w-72 bg-black text-white py-2'>
-                            <button type='submit' onClick={signUp}>Sign Up</button>
+                            <button type='submit' onClick={uploadData}>Sign Up</button>
+                            {/* <NavLink to="/genre">Sign Up</NavLink> */}
                         </div>
-                        <h1 className='text-gray-500'><Link to="/signup">Already registered?</Link></h1>
+                        <h1 className='text-gray-500'><NavLink to="/login">Already Registered?</NavLink></h1>
                         {/* <h1 className='underline'> <Link to="/signup">Join us</Link></h1> */}
-                    </form>
+                    </div>
                 </div>
             </div>
         </>
